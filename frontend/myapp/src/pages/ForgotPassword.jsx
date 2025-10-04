@@ -1,4 +1,5 @@
 import { useState } from "react";
+import api from "../api/axios";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -6,18 +7,20 @@ export default function ForgotPassword() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await fetch("http://localhost:5000/api/auth/forgot-password", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email }),
-    });
-    const data = await res.json();
-    setMsg(data.message || data.error);
+    try {
+      const res = await api.post("/auth/forgot-password", { email });
+      setMsg(res.data.message);
+    } catch (err) {
+      setMsg(err.response?.data?.error || "Something went wrong");
+    }
   };
 
   return (
     <div className="flex items-center justify-center h-screen bg-gray-100">
-      <form onSubmit={handleSubmit} className="bg-white p-6 rounded-xl shadow-md w-80">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white p-6 rounded-xl shadow-md w-80"
+      >
         <h2 className="text-xl font-bold mb-4">Forgot Password</h2>
         <input
           type="email"

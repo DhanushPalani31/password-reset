@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
+import api from "../api/axios";
 
 export default function ResetPassword() {
   const { token } = useParams();
@@ -8,18 +9,20 @@ export default function ResetPassword() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await fetch(`http://localhost:5000/api/auth/reset-password/${token}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ password }),
-    });
-    const data = await res.json();
-    setMsg(data.message || data.error);
+    try {
+      const res = await api.post(`/auth/reset-password/${token}`, { password });
+      setMsg(res.data.message);
+    } catch (err) {
+      setMsg(err.response?.data?.error || "Something went wrong");
+    }
   };
 
   return (
     <div className="flex items-center justify-center h-screen bg-gray-100">
-      <form onSubmit={handleSubmit} className="bg-white p-6 rounded-xl shadow-md w-80">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white p-6 rounded-xl shadow-md w-80"
+      >
         <h2 className="text-xl font-bold mb-4">Reset Password</h2>
         <input
           type="password"
