@@ -8,8 +8,9 @@ connectDB();
 
 // ✅ Allowed origins
 const allowedOrigins = [
-  "http://localhost:5173", 
-  "https://passwordresetapplicatio.netlify.app"
+  "http://localhost:5173",
+  "https://passwordresetapplicatio.netlify.app",
+  "https://passwordforgot.netlify.app"   // 👈 Add this
 ];
 
 app.use(cors({
@@ -22,6 +23,7 @@ app.use(cors({
   },
   credentials: true
 }));
+
 
 app.use(express.json());
 
