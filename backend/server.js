@@ -8,24 +8,20 @@ connectDB();
 
 // ✅ Allowed origins
 const allowedOrigins = [
-  "http://localhost:5173",                        // local dev (Vite)
-  "https://passwordresetapplicatio.netlify.app",  // your deployed frontend
+  "http://localhost:5173", 
+  "https://passwordresetapplicatio.netlify.app"
 ];
 
-// ✅ Configure CORS
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true,
-  })
-);
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true
+}));
 
 app.use(express.json());
 
