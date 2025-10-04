@@ -6,20 +6,36 @@ import authRoutes from "./routes/authRoutes.js";
 const app = express();
 connectDB();
 
-app.use(cors({
-  origin: "http://localhost:5173",   
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  credentials: true
-}));
+// ✅ Allowed origins
+const allowedOrigins = [
+  "http://localhost:5173",                        // local dev (Vite)
+  "https://passwordresetapplicatio.netlify.app",  // your deployed frontend
+];
+
+// ✅ Configure CORS
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  })
+);
 
 app.use(express.json());
 
-
+// Routes
 app.use("/api/auth", authRoutes);
 
 app.get("/api/test", (req, res) => {
   res.json({ message: "Backend is alive ✅" });
 });
 
-const PORT = 5000;
+// Server
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
