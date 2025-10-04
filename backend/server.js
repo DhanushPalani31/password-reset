@@ -6,24 +6,23 @@ import authRoutes from "./routes/authRoutes.js";
 const app = express();
 connectDB();
 
-// ✅ Allowed origins
 const allowedOrigins = [
-  "http://localhost:5173",
-  "https://passwordresetapplicatio.netlify.app",
-  "https://passwordforgot.netlify.app"   // 👈 Add this
+  "http://localhost:5173", 
+  "https://passwordforgot.netlify.app"   // ✅ Your deployed frontend
 ];
 
-app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  credentials: true
-}));
-
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  })
+);
 
 app.use(express.json());
 
