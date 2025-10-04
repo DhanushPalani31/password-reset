@@ -9,6 +9,7 @@ export default function ForgotPassword() {
     e.preventDefault();
     try {
       const res = await api.post("/auth/forgot-password", { email });
+      console.log(res.data.message)
       setMsg(res.data.message);
     } catch (err) {
       setMsg(err.response?.data?.error || "Something went wrong");
